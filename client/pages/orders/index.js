@@ -17,7 +17,7 @@ const OrderIndex = ({ orders }) => {
 
 OrderIndex.getInitialProps = async (context, client) => {
     const { data: orders } = await client.get('/api/orders');
-    return orders;
+    return { orders };
 }
 
 export default OrderIndex;
