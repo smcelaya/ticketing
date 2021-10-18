@@ -1,0 +1,20 @@
+name: deploy-payments
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'payments/**'
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd payments && docker build -t smcelaya/payments .
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing
+      - run: kubectl rollout restart deployment payments-depl
